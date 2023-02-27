@@ -6,8 +6,7 @@ from src.Models.Bill import Bill
 class BillRepository:
     _bills: list[Bill] = []
 
-    @property
-    def bills(self):
+    def list(self):
         return self._bills
 
     def add(self, bill: Bill):
@@ -19,9 +18,9 @@ class BillRepository:
         self._bills.remove(bill)
 
     def find(self, bill_id: UUID):
-        matches = (bill for bill in self._bills if bill_id == bill.id)
+        result = next((bill for bill in self._bills if bill_id == bill.id), None)
 
-        return matches.send(None)
+        return result
 
     def update(self, bill):
         old_bill = self.find(bill.id)

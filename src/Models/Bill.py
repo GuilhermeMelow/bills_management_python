@@ -1,12 +1,13 @@
 from uuid import UUID, uuid4
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Bill:
-    def __init__(self, description: str, due_date: datetime, bill_id=uuid4()):
+    def __init__(self, description: str, due_date: datetime, bill_id=None):
         self.description = description
         self.due_date = due_date
-        self._id = bill_id
+
+        self._id = bill_id if bill_id is not None else uuid4()
 
     _price = 0
 
