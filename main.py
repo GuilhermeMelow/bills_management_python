@@ -1,12 +1,13 @@
-from datetime import datetime
-from src.Models.Bill import Bill
-from src.Repositories.BillRepository import BillRepository
+from flask import Flask
 
-if __name__ == '__main__':
-    bill = Bill.create_with_price("", datetime(2022, 12, 10), 120)
+from src.Controllers.BillController import bill_controller
 
-    repository = BillRepository()
-    repository.add(bill)
-    repository.update(Bill("Test", bill.due_date, bill.id))
+app = Flask(__name__)
 
-    print(repository.find(bill.id).description)
+
+@app.get("/")
+def testing_default():
+    return "Everything is fine, there is no worries now :)"
+
+
+bill_controller(app)

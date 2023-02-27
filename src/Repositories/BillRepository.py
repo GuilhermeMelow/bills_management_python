@@ -1,10 +1,13 @@
+from datetime import datetime
 from uuid import UUID
 
 from src.Models.Bill import Bill
 
 
 class BillRepository:
-    _bills: list[Bill] = []
+    _bills: list[Bill] = [
+        Bill("Teste", datetime.now())
+    ]
 
     def list(self):
         return self._bills
