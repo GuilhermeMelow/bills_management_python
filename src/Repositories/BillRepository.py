@@ -5,9 +5,7 @@ from src.Models.Bill import Bill
 
 
 class BillRepository:
-    _bills: list[Bill] = [
-        Bill("Teste", datetime.now())
-    ]
+    _bills: list[Bill] = []
 
     def list(self):
         return self._bills

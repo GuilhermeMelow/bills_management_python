@@ -1,6 +1,6 @@
 from flask import Flask
 
-from src.Controllers.BillController import bill_controller
+from src.Controllers.Bill.BillController import bill_controller
 
 app = Flask(__name__)
 
