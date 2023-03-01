@@ -8,7 +8,7 @@ from src.Repositories.BillRepository import BillRepository
 class BillRepositoryTest(unittest.TestCase):
     def test_add(self):
         repository = BillRepository()
-        bill = Bill("Teste", datetime.now())
+        bill = Bill("Teste", datetime.now(), 100)
 
         repository.add(bill)
 
@@ -17,7 +17,7 @@ class BillRepositoryTest(unittest.TestCase):
 
     def test_find(self):
         repository = BillRepository()
-        bill = Bill("TesteFind", datetime(2022, 12, 10))
+        bill = Bill("TesteFind", datetime(2022, 12, 10), 100)
         repository.add(bill)
 
         result = repository.find(bill.id)
@@ -26,7 +26,7 @@ class BillRepositoryTest(unittest.TestCase):
 
     def test_remove(self):
         repository = BillRepository()
-        bill = Bill("TesteRemove", datetime(2022, 12, 10))
+        bill = Bill("TesteRemove", datetime(2022, 12, 10), 100)
         repository.add(bill)
 
         repository.remove(bill.id)

@@ -3,10 +3,10 @@ from datetime import datetime, timezone
 
 
 class Bill:
-    def __init__(self, description: str, due_date: datetime, bill_id=None):
+    def __init__(self, description: str, due_date: datetime, price: float, bill_id: [UUID, None] = None):
         self.description = description
         self.due_date = due_date
-
+        self.increase(price)
         self._id = bill_id if bill_id is not None else uuid4()
 
     _price = 0
@@ -20,8 +20,8 @@ class Bill:
         return self._id
 
     def increase(self, value: float):
-        if value < 0:
-            raise ValueError("Value must be positive.")
+        if value <= 0:
+            raise ValueError("Value must more than zero.")
 
         self._price += value
 
@@ -35,10 +35,3 @@ class Bill:
             raise ValueError("The price can't be negative.")
 
         self._price = price
-
-    @classmethod
-    def create_with_price(cls, description: str, due_date: datetime, price: float):
-        bill = cls(description, due_date)
-        bill._price = price
-
-        return bill

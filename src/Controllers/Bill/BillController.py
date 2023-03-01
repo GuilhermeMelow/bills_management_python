@@ -1,6 +1,10 @@
-from flask import Flask, jsonify
+import json
+
+from dateutil.parser import parse
+from flask import Flask, jsonify, request
 
 from src.Controllers.Bill.BillResponse import BillResponse
+from src.Models.Bill import Bill
 from src.Repositories.BillRepository import BillRepository
 
 
@@ -15,6 +19,13 @@ def bill_controller(app: Flask):
 
     @app.post("/bills")
     def register_bill():
-        bills = repository.list()
+        bill: Bill = json.loads(request.data, object_hook=__as_bill_request)
 
-        return jsonify([BillResponse.create(bill) for bill in bills])
+        repository.add(bill)
+
+        return jsonify(BillResponse.create(bill))
+
+    def __as_bill_request(dct: [str, str]) -> Bill:
+        return Bill(description=dct["description"],
+                    price=dct["price"],
+                    due_date=parse(dct["due_date"]))
