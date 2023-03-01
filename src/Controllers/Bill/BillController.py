@@ -1,7 +1,8 @@
 import json
+from uuid import UUID
 
 from dateutil.parser import parse
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 
 from src.Controllers.Bill.BillResponse import BillResponse
 from src.Models.Bill import Bill
@@ -15,10 +16,16 @@ def bill_controller(app: Flask):
     def list_bills():
         bills = repository.list()
 
-        return jsonify([BillResponse.create(bill) for bill in bills])
+        return make_response(jsonify([BillResponse.create(bill) for bill in bills]), 200)
+
+    @app.route("/bills/<bill_id>")
+    def find(bill_id):
+        bill = repository.find(UUID(bill_id))
+
+        return make_response(BillResponse.create(bill), 200)
 
     @app.post("/bills")
-    def register_bill():
+    def register():
         bill: Bill = json.loads(request.data, object_hook=__as_bill_request)
 
         repository.add(bill)
