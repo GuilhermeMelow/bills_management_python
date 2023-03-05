@@ -1,4 +1,3 @@
-from datetime import datetime
 from uuid import UUID
 
 from src.Models.Bill import Bill
@@ -23,8 +22,9 @@ class BillRepository:
 
         return result
 
-    def update(self, bill):
-        old_bill = self.find(bill.id)
+    def update(self, bill_id: UUID, bill: Bill):
+        old_bill = self.find(bill_id)
+
         index = self._bills.index(old_bill)
 
         self._bills[index] = bill

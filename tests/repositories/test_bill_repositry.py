@@ -34,6 +34,17 @@ class BillRepositoryTest(unittest.TestCase):
         result = repository.find(bill.id)
         self.assertIsNone(result)
 
+    def test_update(self):
+        repository = BillRepository()
+        bill = Bill("TesteRemove", datetime(2022, 12, 10), 100)
+        repository.add(bill)
+        bill.increase(200)
+
+        repository.update(bill.id, bill)
+
+        result = repository.find(bill.id)
+        self.assertEqual(result.price, bill.price)
+
 
 if __name__ == '__main__':
     unittest.main()
