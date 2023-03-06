@@ -1,30 +1,29 @@
 from uuid import UUID
 
+from src.DbModels.Bill import BillDbModel
 from src.Models.Bill import Bill
+from src.Services.Database import get_database
 
 
 class BillRepository:
-    _bills: list[Bill] = []
+    __db = get_database()
+    __collection = __db.get_collection("bills")
 
     def list(self):
-        return self._bills
+        db_models = [BillDbModel(**m) for m in self.__collection.find()]
+
+        return [Bill(**m.__dict__) for m in db_models]
 
     def add(self, bill: Bill):
-        self._bills.append(bill)
+        self.__collection.insert_one(bill.__dict__)
 
     def remove(self, bill_id: UUID):
-        bill = self.find(bill_id)
+        self.__collection.delete_one({"_id": bill_id})
 
-        self._bills.remove(bill)
+    def find(self, bill_id: UUID) -> Bill:
+        db_model = BillDbModel(**self.__collection.find_one({"_id": bill_id}))
 
-    def find(self, bill_id: UUID):
-        result = next((bill for bill in self._bills if bill_id == bill.id), None)
-
-        return result
+        return Bill(**db_model.__dict__)
 
     def update(self, bill_id: UUID, bill: Bill):
-        old_bill = self.find(bill_id)
-
-        index = self._bills.index(old_bill)
-
-        self._bills[index] = bill
+        self.__collection.update_one(filter={"_id": bill_id}, update={'$set': bill.__dict__})

@@ -3,11 +3,11 @@ from datetime import datetime, timezone
 
 
 class Bill:
-    def __init__(self, description: str, due_date: datetime, price: float, bill_id: [UUID, None] = None):
+    def __init__(self, description: str, due_date: datetime, price: float, id: [UUID, None] = None):
         self.description = description
         self.due_date = due_date
         self.increase(price)
-        self._id = bill_id if bill_id is not None else uuid4()
+        self._id = id if id is not None else uuid4()
 
     _price = 0
 
