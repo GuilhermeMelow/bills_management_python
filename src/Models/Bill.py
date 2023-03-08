@@ -1,9 +1,10 @@
+from ctypes import Union
 from uuid import UUID, uuid4
-from datetime import datetime, timezone
+from datetime import datetime
 
 
 class Bill:
-    def __init__(self, description: str, due_date: datetime, price: float, id: [UUID, None] = None):
+    def __init__(self, description: str, due_date: datetime, price: float, id: Union[UUID, None] = None):
         self.description = description
         self.due_date = due_date
         self.increase(price)
