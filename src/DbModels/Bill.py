@@ -3,16 +3,18 @@ from datetime import datetime
 from uuid import UUID
 
 
-@dataclass(init=True)
-class BillDbModel:
-    _id: UUID
-    description: str
-    due_date: datetime
-    _price: float
-
+class DbModel:
     def __post_init__(self):
-        privates = [field for field in self.__dict__ if field[0] is '_']
+        privates = [field for field in self.__dict__ if field[0] == '_']
 
         for field in privates:
             setattr(self, field[1:], getattr(self, field))
             delattr(self, field)
+
+
+@dataclass(init=True)
+class BillDbModel(DbModel):
+    _id: UUID
+    description: str
+    due_date: datetime
+    _price: float

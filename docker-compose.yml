@@ -1,0 +1,15 @@
+services:
+  bills-management:
+    build: .
+    ports:
+      - "8000:5000"
+
+  mongo-bills:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo:/var/lib/mongo
+
+volumes:
+  mongo:
