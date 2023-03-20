@@ -2,7 +2,7 @@ services:
   bills-management:
     build: .
     ports:
-      - "8000:5000"
+      - 5002:5002
 
   mongo-bills:
     image: mongo

@@ -1,0 +1,22 @@
+services:
+  bills-management:
+    build: .
+    command:
+      [
+        "sh",
+        "-c",
+        "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 main.py"
+      ]
+    ports:
+      - 5002:5002 #porta para interagir com a API
+      - 5678:5678 #porta para ouvir solicitação de debugging
+
+  mongo-bills:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo:/var/lib/mongo
+
+volumes:
+  mongo:
