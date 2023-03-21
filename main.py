@@ -1,6 +1,9 @@
+from dotenv import load_dotenv
 from flask import Flask
 
 from src.Controllers.Bill.BillController import bill_controller
+
+load_dotenv()
 
 
 def create_app():
