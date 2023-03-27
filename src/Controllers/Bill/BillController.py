@@ -4,6 +4,7 @@ from dateutil.parser import parse
 from flask import Flask, Request, jsonify, request, make_response
 
 from src.Controllers.Bill.BillResponse import BillResponse
+from src.Decorators.Auth import auth
 from src.Models.Bill import Bill
 from src.Repositories.BillRepository import BillRepository
 
@@ -12,6 +13,7 @@ def bill_controller(app: Flask):
     repository = BillRepository()
 
     @app.get("/bills")
+    @auth
     def bills_list():
         bills = repository.list()
         result = jsonify([BillResponse.create(bill) for bill in bills])
