@@ -3,9 +3,9 @@ from src.Controllers.Bill.BillController import bill_controller
 
 from os import environ as env
 from dotenv import load_dotenv
+from flask import Flask, make_response
 
-from flask import Flask
-from authlib.integrations.flask_client import OAuth
+from src.Exceptions import ApiException
 
 
 load_dotenv()
@@ -18,6 +18,10 @@ def create_app():
     @app.get("/")
     def home():
         return "Everything is fine, there is no worries now :)"
+
+    @app.errorhandler(ApiException)
+    def auth_error_handler(exception: ApiException):
+        return make_response(exception.__dict__, exception.code)
 
     return app
 

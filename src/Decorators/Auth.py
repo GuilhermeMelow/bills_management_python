@@ -1,15 +1,9 @@
-from attr import dataclass
-from flask import request
+from flask import request, session
 from os import environ as env
-import flask
 from requests import request as send_request
 from jose import jwt
 
-
-@dataclass(init=True)
-class AuthException(Exception):
-    error: str
-    code: int = 401
+from src.Exceptions import AuthException
 
 
 def get_jwt_token(raw: str):
@@ -53,7 +47,7 @@ def auth(func):
                 audience=env.get("AUTH0_API_AUDIENCE"),
                 issuer=f"https://{env.get('AUTH0_DOMAIN')}/")
 
-            flask.session["user_claims"] = payload
+            session["user_claims"] = payload
 
         except jwt.ExpiredSignatureError:
             raise AuthException("Token is expired.")
