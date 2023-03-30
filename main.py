@@ -23,13 +23,11 @@ def create_app():
     def auth_error_handler(exception: ApiException):
         return make_response(exception.__dict__, exception.code)
 
-    return app
+    with app.app_context():
+        bill_controller()
+
+    app.run(host="0.0.0.0", port=5002)
 
 
 if __name__ == "__main__":
-    app = create_app()
-
-    auth_controller(app)
-    bill_controller(app)
-
-    app.run(host="0.0.0.0", port=5002)
+    create_app()
