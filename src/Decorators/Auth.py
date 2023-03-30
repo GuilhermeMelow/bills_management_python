@@ -6,7 +6,7 @@ from jose import jwt
 from src.Exceptions import AuthException
 
 
-def get_jwt_token(raw: str):
+def __get_jwt_token(raw: str):
     parts = raw.split()
 
     if not parts[0].lower() == "bearer":
@@ -18,7 +18,7 @@ def get_jwt_token(raw: str):
     return parts[1]
 
 
-def get_rsa_key(token):
+def __get_rsa_key(token):
     jwks = send_request(
         url=f"https://{env.get('AUTH0_DOMAIN')}/.well-known/jwks.json",
         method="get").json()
@@ -36,13 +36,12 @@ def get_rsa_key(token):
 
 def auth(func):
     def wrapper(*args, **kwargs):
-        raw = request.headers.get("Authorization")
-        token = get_jwt_token(raw)
+        token = __get_jwt_token(request.headers.get("Authorization"))
 
         try:
             payload = jwt.decode(
                 token,
-                key=get_rsa_key(token),
+                key=__get_rsa_key(token),
                 algorithms=env.get("AUTH0_ALGORITHMS"),
                 audience=env.get("AUTH0_API_AUDIENCE"),
                 issuer=f"https://{env.get('AUTH0_DOMAIN')}/")

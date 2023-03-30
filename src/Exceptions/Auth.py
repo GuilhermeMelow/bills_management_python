@@ -1,6 +1,6 @@
 from attr import dataclass
 
-from src.Exceptions import ApiException
+from src.Exceptions.Api import ApiException
 
 
 @dataclass(init=True)
