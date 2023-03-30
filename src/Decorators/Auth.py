@@ -1,4 +1,4 @@
-from flask import request, session
+from flask import Flask, request, session
 from os import environ as env
 from requests import request as send_request
 from jose import jwt
@@ -34,29 +34,42 @@ def __get_rsa_key(token):
     }
 
 
-def auth(func):
-    def wrapper(*args, **kwargs):
-        token = __get_jwt_token(request.headers.get("Authorization"))
+def __authenticate():
+    authorization_token = request.headers.get("Authorization")
 
-        try:
-            payload = jwt.decode(
-                token,
-                key=__get_rsa_key(token),
-                algorithms=env.get("AUTH0_ALGORITHMS"),
-                audience=env.get("AUTH0_API_AUDIENCE"),
-                issuer=f"https://{env.get('AUTH0_DOMAIN')}/")
+    if not authorization_token:
+        raise AuthException("No authorization token was assign.")
 
-            session["user_claims"] = payload
+    token = __get_jwt_token(authorization_token)
 
-        except jwt.ExpiredSignatureError:
-            raise AuthException("Token is expired.")
+    try:
+        payload = jwt.decode(
+            token,
+            key=__get_rsa_key(token),
+            algorithms=env.get("AUTH0_ALGORITHMS"),
+            audience=env.get("AUTH0_API_AUDIENCE"),
+            issuer=f"https://{env.get('AUTH0_DOMAIN')}/")
 
-        except jwt.JWTClaimsError:
-            raise AuthException("Incorrect claims, check aud and issuer.")
+        session["user_claims"] = payload
 
-        except Exception:
-            raise AuthException("Unable for authentication.")
+    except jwt.ExpiredSignatureError:
+        raise AuthException("Token is expired.")
 
-        return func(*args, **kwargs)
+    except jwt.JWTClaimsError:
+        raise AuthException("Incorrect claims, check aud and issuer.")
 
-    return wrapper
+    except Exception:
+        raise AuthException("Unable for authentication.")
+
+
+def auth_requests(*args, **kwargs):
+    app: Flask = kwargs["app"]
+
+    def decorator(func):
+        def inner(*args, **kwargs):
+            app.before_request(__authenticate)
+            return func(*args, **kwargs)
+
+        return inner
+
+    return decorator
