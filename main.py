@@ -1,12 +1,9 @@
-from src.Controllers.Auth.AuthController import auth_controller
-from src.Controllers.Bill.BillController import bill_controller
-
 from os import environ as env
 from dotenv import load_dotenv
 from flask import Flask, make_response
+from src.Controllers.Bill.BillController import bill_controller
 
 from src.Exceptions import ApiException
-
 
 load_dotenv()
 
