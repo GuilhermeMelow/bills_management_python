@@ -1,24 +1,17 @@
-from ctypes import Union
+from dataclasses import dataclass
 from uuid import UUID, uuid4
 from datetime import datetime
 
 
+@dataclass(kw_only=True, frozen=True)
 class Bill:
-    def __init__(self, description: str, due_date: datetime, price: float, id=None):
-        self.description = description
-        self.due_date = due_date
-        self.increase(price)
-        self._id = id if id is not None else uuid4()
+    id: UUID = None
+    description: str
+    due_date: datetime
+    price = 0.0
 
-    _price = 0
-
-    @property
-    def price(self) -> float:
-        return self._price
-
-    @property
-    def id(self) -> UUID:
-        return self._id
+    def post__init__(self):
+        self.id = self.id if self.id else uuid4()
 
     def increase(self, value: float):
         if value <= 0:
