@@ -2,16 +2,14 @@ from dataclasses import dataclass
 from uuid import UUID, uuid4
 from datetime import datetime
 
+from src.Models.Model import Model
+
 
 @dataclass(kw_only=True, frozen=True)
-class Bill:
-    id: UUID = None
+class Bill(Model):
     description: str
     due_date: datetime
     price = 0.0
-
-    def post__init__(self):
-        self.id = self.id if self.id else uuid4()
 
     def increase(self, value: float):
         if value <= 0:
