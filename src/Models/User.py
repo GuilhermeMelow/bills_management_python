@@ -1,16 +1,18 @@
 from dataclasses import dataclass
 from uuid import UUID
+
+from src.Models.Amount import Amount
 from src.Models.Model import Model
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass
 class Person(Model):
     name: str
     email: str
-    amount: float
     family_id: UUID
+    amount: Amount
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass
 class Family(Model):
     description: str
