@@ -17,4 +17,4 @@ class BillDbModel(DbModel):
     _id: UUID
     description: str
     due_date: datetime
-    _price: float
+    price: float

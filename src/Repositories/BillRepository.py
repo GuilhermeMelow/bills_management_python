@@ -26,5 +26,9 @@ class BillRepository:
         return Bill(**db_model.__dict__)
 
     def update(self, bill_id: UUID, bill: Bill):
-        self.__collection.update_one(filter={"_id": bill_id}, update={
-                                     '$set': bill.__dict__})
+        self.__collection.update_one(
+            filter={"_id": bill_id},
+            update={
+                '$set': bill.__dict__
+            }
+        )

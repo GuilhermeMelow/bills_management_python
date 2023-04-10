@@ -1,24 +1,15 @@
-import math
-from src.Utils.Frozen import Frozen
+class Amount(float):
+    def __add__(self, __value: float) -> float:
+        if __value <= 0:
+            raise ValueError("Value passed for amount must be more than zero.")
 
+        return super().__add__(__value)
 
-from dataclasses import dataclass
-
-
-@dataclass
-class Amount():
-    value: float = Frozen()
-
-    def increase(self, value):
-        if value <= 0:
-            raise ValueError("Value must more than zero.")
-
-        self._value += value
-
-    def decrease(self, value):
-        sub_value = self._value - abs(value)
+    def __sub__(self, __value: float) -> float:
+        copiedValue = float(self)
+        sub_value = copiedValue - abs(__value)
 
         if sub_value < 0:
-            raise ValueError("The value can't be negative.")
+            raise ValueError("The Amount can't be negative.")
 
-        self._value = sub_value
+        return super().__sub__(__value)

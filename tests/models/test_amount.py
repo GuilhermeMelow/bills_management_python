@@ -11,39 +11,41 @@ class BillTest(unittest.TestCase):
 
         amount = Amount(amount_value)
 
-        self.assertEqual(amount.value, amount_value)
+        self.assertEqual(amount, amount_value)
 
     def test_increase_amount(self):
         amount_value = 10
+        add_value = 20
         result = 30
         amount = Amount(amount_value)
 
-        amount.increase(20)
+        amount += add_value
 
-        self.assertEqual(amount.value, result)
+        self.assertEqual(amount, result)
 
     def test_decrease_amount(self):
         amount_value = 30
+        sub_value = 20
         result = 10
         amount = Amount(amount_value)
 
-        amount.decrease(20)
+        amount -= sub_value
 
-        self.assertEqual(amount.value, result)
+        self.assertEqual(amount, result)
 
     def test_increase_exception(self):
-        amount_increase_value = -20
-
         amount = Amount(20)
 
-        self.assertRaises(ValueError, amount.increase, amount_increase_value)
+        def increase_exception(amount, value=-20): amount += value
+
+        self.assertRaises(ValueError, increase_exception, amount)
 
     def test_decrease_exception(self):
-        amount_decrease_value = -20
-
         amount = Amount(0)
 
-        self.assertRaises(ValueError, amount.decrease, amount_decrease_value)
+        def decrease_exception(amount, value=-20): amount -= value
+
+        self.assertRaises(ValueError, decrease_exception, amount)
 
 
 if __name__ == '__main__':
