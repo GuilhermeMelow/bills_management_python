@@ -16,3 +16,4 @@ class Person(Model):
 @dataclass
 class Family(Model):
     description: str
+    persons: list[Person]
